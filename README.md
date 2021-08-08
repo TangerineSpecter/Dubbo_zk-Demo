@@ -88,8 +88,8 @@ zkServer.sh status
 #### Zookeeper数据模型基本操作
 
 ```bash
-# 查看某个路径下目录列表
-ls [path]
+# 查看某个路径下目录列表,watcher事件可以监听子节点
+ls [path] watch
 # 查看目录更详细的信息
 ls2 [path]
 # 获取节点数据和状态信息,watch对节点进行事件监听
@@ -139,6 +139,14 @@ numChildren = 1
 - 提供分布式锁
 - 集群管理，保证集群中数据的强一致性
 
+#### Zookeeper的session基本原理
+
+- 客户端和服务端之间的连接存在会话
+- 每个会话都可以设置一个超时时间
+- 心跳结束，session过期
+- session过期，则临时节点znode会被抛弃
+- 心跳机制：客户端向服务端的ping包请求
+
 #### Zookeeper的watcher机制
 
 - 针对每个节点的操作，都会有一个监督者watcher(一个事件)
@@ -150,12 +158,12 @@ numChildren = 1
     - 节点删除事件
     - 节点数据变化事件
     - 这样就可以根据节点的变化类型进行相应的操作
-    
-#### Zookeeper的session基本原理
 
-- 客户端和服务端之间的连接存在会话
-- 每个会话都可以设置一个超时时间
-- 心跳结束，session过期
-- session过期，则临时节点znode会被抛弃
-- 心跳机制：客户端向服务端的ping包请求
+#### watch事件类型
 
+- 创建父节点触发：NodeCreated
+- 修改父节点数据触发：NodeDataChanged
+- 删除父节点触发：NodeDeleted
+- ls为父节点设置watcher，创建子节点触发：NodeChildrenChanged
+- ls为父节点设置watcher，删除子节点触发：NodeChildrenChanged
+- ls为父节点设置watcher，修改子节点不触发事件（和父节点一样用get watcher设置）
