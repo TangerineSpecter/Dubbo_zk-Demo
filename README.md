@@ -102,7 +102,33 @@ create [-s][-e] [path] data acl
 set [path] data [version]
 # 删除节点
 delete [path] [version]
+```
 
+> 详情字段说明
+
+```bash
+# 创建节点id
+cZxid = 0x0
+# 创建节点时间 
+ctime = Thu Jan 01 08:00:00 CST 1970
+# 修改节点id
+mZxid = 0x0
+# 修改节点时间
+mtime = Thu Jan 01 08:00:00 CST 1970
+# 子节点id
+pZxid = 0x3
+# 子节点version
+cversion = 1
+# 当前节点数据版本号，变化累加1
+dataVersion = 0
+# 当前节点权限版本号，变化累加1
+aclVersion = 0
+# 
+ephemeralOwner = 0x0
+# 数据长度
+dataLength = 0
+# 子节点数量
+numChildren = 1
 ```
 
 #### Zookeeper的作用
@@ -112,3 +138,17 @@ delete [path] [version]
 - 发布与订阅，类型消息队列，dubbo发布者把数据存储在znode上，订阅者会读取到这个数据
 - 提供分布式锁
 - 集群管理，保证集群中数据的强一致性
+
+#### Zookeeper的watcher机制
+
+- 针对每个节点的操作，都会有一个监督者watcher(一个事件)
+- 当监控某个对象（znode）发生变化，就会触发watcher事件
+- 一次性的，触发后立刻销毁
+- 父节点，子节点增删改都能够触发其watcher
+- 针对不同类型的操作，触发的watcher事件也不同：
+    - 节点创建事件
+    - 节点删除事件
+    - 节点数据变化事件
+    - 这样就可以根据节点的变化类型进行相应的操作
+    
+#### 
