@@ -213,3 +213,17 @@ addauth scheme auth
             - delete：删除子节点
             - admin：设置权限
            
+#### Zookeeper的四字命令（部分，全部内容可以查看官方文档）
+
+- 通过自身提供的简写命令来和服务器进行交互
+- 需要使用到nc命令，安装：ynm install nc
+- echo [commond四字命令] | nc [ip] [port]
+- [stat] 查看zk的状态信息，以及是否mode
+- [ruok] 查看当前zkserver是否启动，返回imok
+- [dump] 列出未经处理的会话和临时节点
+- [conf] 查看服务器相关配置
+- [cons] 展示连接到服务器的客户端信息
+- [envi] 环境变量
+- [mntr] 监控zk的健康信息
+- [wchs] 展示watch的信息
+- [wchc]与[wchp] session与watch以及path与watch信息（需要在配置文件中添加白名单，4lw.commands.whitelist=*，表示所有）
