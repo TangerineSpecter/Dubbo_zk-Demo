@@ -96,9 +96,9 @@ ls2 [path]
 get [path] watch
 # 查看当前节点状态信息
 stat [path] watch
-# 创建节点并赋值,s表示顺序节点，e表示临时节点，path路径，data数据，acl权限，默认world全世界
+# 创建节点并赋值,s表示顺序节点(名字会有编号)，e表示临时节点，path路径，data数据，acl权限，默认world全世界
 create [-s][-e] [path] data acl
-# 修改节点存储的数据,version表示版本号，查看详情里面的dataVersion
+# 修改节点存储的数据,version表示版本号，查看详情里面的dataVersion(乐观锁)
 set [path] data [version]
 # 删除节点
 delete [path] [version]
@@ -123,7 +123,7 @@ cversion = 1
 dataVersion = 0
 # 当前节点权限版本号，变化累加1
 aclVersion = 0
-# 
+# 判断是否临时节点，如果不是0x0就是临时节点
 ephemeralOwner = 0x0
 # 数据长度
 dataLength = 0
@@ -151,4 +151,11 @@ numChildren = 1
     - 节点数据变化事件
     - 这样就可以根据节点的变化类型进行相应的操作
     
-#### 
+#### Zookeeper的session基本原理
+
+- 客户端和服务端之间的连接存在会话
+- 每个会话都可以设置一个超时时间
+- 心跳结束，session过期
+- session过期，则临时节点znode会被抛弃
+- 心跳机制：客户端向服务端的ping包请求
+
