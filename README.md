@@ -88,8 +88,21 @@ zkServer.sh status
 #### Zookeeper数据模型基本操作
 
 ```bash
-# 查看根目录
-ls /
+# 查看某个路径下目录列表
+ls [path]
+# 查看目录更详细的信息
+ls2 [path]
+# 获取节点数据和状态信息,watch对节点进行事件监听
+get [path] watch
+# 查看当前节点状态信息
+stat [path] watch
+# 创建节点并赋值,s表示顺序节点，e表示临时节点，path路径，data数据，acl权限，默认world全世界
+create [-s][-e] [path] data acl
+# 修改节点存储的数据,version表示版本号，查看详情里面的dataVersion
+set [path] data [version]
+# 删除节点
+delete [path] [version]
+
 ```
 
 #### Zookeeper的作用
