@@ -167,3 +167,49 @@ numChildren = 1
 - ls为父节点设置watcher，创建子节点触发：NodeChildrenChanged
 - ls为父节点设置watcher，删除子节点触发：NodeChildrenChanged
 - ls为父节点设置watcher，修改子节点不触发事件（和父节点一样用get watcher设置）
+
+#### watcher使用场景
+
+- 统一的资源配置，主机更新节点为新的配置信息，通知更新客户端配置
+- 作为dubbo的配置中心和注册中心
+- 开发/测试环境分离，开发者无权操作测试库节点
+- 生产环境上控制指定ip服务可以访问相关节点，防止混乱
+
+#### ACL（access control lists）权限控制
+
+- 针对节点可以设置相关读写等权限，目的是为了保障数据的安全性
+- 权限permissions可以指定不同的权限范围以及角色
+
+#### ACL命令行
+
+```bash
+# 获取某个节点的acl权限信息，默认world
+getAcl [path]
+# 设置某个节点的acl权限信息
+setAcl [path] world:anyone:crwda
+例：setAcl /orange digest:账号:密码:crwda
+setAcl /orange ip:192.168.0.1:crwda
+# 输入认证授权信息，注册时输入明文密码（登录），但是在zk的系统里面，密码是以加密的形式存在的
+addauth scheme auth
+例：addauth digest 账号:密码
+```
+
+#### ACL构成
+
+- zk的acl通过[scheme:id:permissions]来构成权限列表
+    - scheme：代表采用某种权限机制
+        - world下只有一个id，即只有一个用户，也就是anyone，那么组合写法world:anyone:[permissions]
+        - auth：代表认证登录，需要注册用户有权限就可以，形式auth:user:password:[permissions]
+        - digest：需要对密码加密才能访问，组合形式为digest:username:BASE64(SHA1(password)):[permissions]
+        - auth是明文，digest是密文，BASE64(SHA1(password))为你记录的密文密码
+        - ip：设置指定ip地址，限制ip进行访问，形式ip:192.168.0.1:[permissions]
+        - super：代表超级管理员，拥有所有权限，修改zkServer.sh 增加超级管理员，重启zk
+    - id：代表允许访问的用户
+    - permissions：权限组合字符串
+        - 权限字符串缩写 crdwa
+            - create：创建子节点
+            - read：获取节点/子节点
+            - write：设置节点数据
+            - delete：删除子节点
+            - admin：设置权限
+           
