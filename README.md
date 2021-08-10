@@ -227,3 +227,12 @@ addauth scheme auth
 - [mntr] 监控zk的健康信息
 - [wchs] 展示watch的信息
 - [wchc]与[wchp] session与watch以及path与watch信息（需要在配置文件中添加白名单，4lw.commands.whitelist=*，表示所有）
+
+#### Zookeeper集群搭建
+
+- zk集群，主从节点，心跳机制（选举模式）
+
+#### zookeeper集群搭建注意点
+
+- 配置数据文件 myid 1/2/3 对应 server.1/2/3
+- 通过 ./skCli.sh -server [ip]:[port] 检测集群是否配置成功
